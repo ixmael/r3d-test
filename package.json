@@ -1,0 +1,27 @@
+{
+  "name": "@ixmael/r3d-test",
+  "version": "0.0.1",
+  "description": "This is the tecnical test for R3D.",
+  "main": "index.js",
+  "repository": "https://github.com/ixmael/r3d-test",
+  "author": "Ismael Ramos <hola@irm.mx>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "ts-node index.ts",
+    "tests": "yarn run tests:unittests",
+    "tests:unittests": "ts-mocha -p ./tsconfig.test.json -r tsconfig-paths/register src/**/__tests__/**/*.spec.ts"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.4.1",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "ts-mocha": "^10.0.0",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "typescript": "3.9.10"
+  }
+}
