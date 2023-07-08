@@ -1,6 +1,6 @@
 FROM node:16.19.0-alpine
 
-ARG APPDIR
+ARG APPDIR=/app
 
 # Copy packages
 COPY ./packages ${APPDIR}
@@ -15,6 +15,8 @@ RUN apk update && \
     npm install
 
 WORKDIR ${APPDIR}/restapi
+
+EXPOSE 3000
 
 ENTRYPOINT ["/usr/local/bin/pm2-runtime"]
 CMD [ "start", "index.ts" ]
