@@ -1,10 +1,17 @@
+import { Db } from 'mongodb';
+
+import { StatsRepositoryType } from '../types';
+
 /**
- *
- * @param conn
- * @returns
+ * Get the stats from the repository
+ * @param database
+ * @returns the stats from the repository
  */
-const getStats = (conn: any) => async (): Promise<any> => {
-  let results: any = {};
+const getStats = (database: Db) => async (): Promise<StatsRepositoryType> => {
+  let results: StatsRepositoryType = {
+    count_sequence_string: 0,
+    count_no_sequence_string: 0,
+  } as StatsRepositoryType;
   let err: any = null;
   try {
     const pipeline = [
@@ -38,10 +45,10 @@ const getStats = (conn: any) => async (): Promise<any> => {
       },
     ];
 
-    const aggCursor = await conn.db('r3d').collection('chains').aggregate(pipeline);
+    const aggCursor = await database.collection('chains').aggregate(pipeline);
     await aggCursor.forEach((statList: any) => {
-      results['count_sequence_string'] = statList.count_sequence_string[0].total;
-      results['count_no_sequence_string'] = statList.count_no_sequence_string[0].total;
+      results.count_sequence_string = statList.count_sequence_string[0].total;
+      results.count_no_sequence_string = statList.count_no_sequence_string[0].total;
     });
   } catch (errorOnSearch: any) {
     err = errorOnSearch;
@@ -51,7 +58,7 @@ const getStats = (conn: any) => async (): Promise<any> => {
     if (err) {
       reject(err);
     } else {
-      resolve(results);
+      resolve(results as StatsRepositoryType);
     }
   });
 };

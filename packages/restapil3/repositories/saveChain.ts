@@ -1,13 +1,15 @@
+import { Db } from 'mongodb';
+
 /**
- *
- * @param conn
- * @returns
+ * Store the chain into the repository
+ * @param database
+ * @returns if the chain was stored or not
  */
-const saveChain = (conn: any) => async (chain: string, number_of_sequence: number): Promise<boolean> => {
+const saveChain = (database: Db) => async (chain: string, number_of_sequence: number): Promise<boolean> => {
   // Try to save
   let err: any = null;
   try {
-    await conn.db('r3d').collection('chains').insertOne({
+    await database.collection('chains').insertOne({
       chain,
       number_of_sequence,
     });

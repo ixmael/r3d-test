@@ -1,3 +1,5 @@
+import { ConfigRepositoryType, ChainRepositoryInterface, ChainServiceInterface, ServicesInterface } from './types';
+
 import repositoryService from './repositories';
 import chainService from './core/services/chainService';
 
@@ -7,61 +9,38 @@ import statsHandler from './handlers/stats';
 const express = require('express');
 const bodyParser = require('body-parser');
 
-/*
+/**
+ * Initialze the RestAPI server
+ */
+const init = async () => {
+  // Initialize the chain repository
+  const configRepository: ConfigRepositoryType = {
+    uri: 'mongodb://root:example@172.19.1.31:27017/?retryWrites=true&w=majority',
+    database: 'r3d',
+  } as ConfigRepositoryType;
+  const repository: ChainRepositoryInterface = await repositoryService(configRepository);
 
-import chainService from './core/services/chainService';
-
-
-
-const restAPI = express();
-restAPI.use(bodyParser.json());
-
-// Prepare the services
-let repository;
-let services;
-(async () => {
-
-  services = {
+  // Initialize the services
+  const services: ServicesInterface = {
     chainService: chainService({
       repository,
-    }),
+    }) as ChainServiceInterface,
   };
-})();
 
-const repository = await repositoryService();
-const services = {
-  chainService: chainService({
-    repository,
-  }),
-};
-
-// Prepare the routes
-restAPI.post('/sequence', sequenceHandler(services));
-
-const port = 3000;
-restAPI.listen(port, () => {
-  console.log(`server up on http://localhost:${port}`);
-});
-*/
-
-const init = async () => {
+  // Initialize the server
   const restAPI = express();
   restAPI.use(bodyParser.json());
 
-  const repository = await repositoryService();
-  const services = {
-    chainService: chainService({
-      repository,
-    }),
-  };
-
+  // Configure the router
   restAPI.post('/sequence', sequenceHandler(services));
   restAPI.get('/stats', statsHandler(services));
 
+  // Start the server
   const port = 3000;
   restAPI.listen(port, () => {
     console.log(`server up on http://localhost:${port}`);
   });
 };
 
+// Execute the RestAPI server
 init();

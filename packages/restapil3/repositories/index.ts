@@ -1,20 +1,23 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, Db } from 'mongodb';
+
+import { ChainRepositoryInterface, ConfigRepositoryType } from '../types';
 
 import saveChain from './saveChain';
 import getStats from './getStats';
 
 /**
- *
- * @returns
+ * Initialize the chain repository
+ * @returns a repository service
  */
-const repositoryService = async (): Promise<any> => {
-  const client = new MongoClient('mongodb://root:example@172.19.1.31:27017/?retryWrites=true&w=majority');
+const repositoryService = async (repositoryService: ConfigRepositoryType): Promise<ChainRepositoryInterface> => {
+  const client = new MongoClient(repositoryService.uri);
 
   // Try to connect
-  let conn: any;
+  let database: Db;
   let err: any = null;
   try {
-    conn = await client.connect();
+    const conn = await client.connect();
+    database = conn.db(repositoryService.database);
   } catch (connectionError: any) {
     err = connectionError;
   }
@@ -23,15 +26,15 @@ const repositoryService = async (): Promise<any> => {
     if (err) {
       // There is an error during connec to database
       reject(err);
-    } else if (conn) {
+    } else if (database) {
       // Create the repository
       resolve({
-        getStats: getStats(conn),
-        saveChain: saveChain(conn),
-      });
+        getStats: getStats(database),
+        saveChain: saveChain(database),
+      } as ChainRepositoryInterface);
     } else {
       // There is an unkwon error
-      reject(new Error('Unkwon error'));
+      reject(new Error('Unknown error'));
     }
   });
 

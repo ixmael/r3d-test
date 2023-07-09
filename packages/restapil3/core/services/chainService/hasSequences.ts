@@ -1,11 +1,11 @@
 import getSequencesNumber from '@ixmael/core';
 
 /**
- *
+ * Detects if a chain has a sequence at least
  * @param chain
- * @returns
+ * @returns if sequence has sequences or not
  */
-const hasSequences = (chain: string): Boolean => {
+const hasSequences = (chain: string): boolean => {
   const numberOfSequence = getSequencesNumber(chain);
 
   let hasSequences = false;
