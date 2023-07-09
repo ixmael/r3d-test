@@ -1,11 +1,11 @@
-import { StatsType } from '../../../types';
+import { StatsType, ChainRepositoryInterface } from '../../../types';
 
 /**
  * Fetch the stats from the repository
  * @param chain
  * @returns the stats
  */
-const getStats = (repository: any) => async (): Promise<StatsType> => {
+const getStats = (repository: ChainRepositoryInterface) => async (): Promise<StatsType> => {
   let stats: StatsType | null = null;
   let err: any = null;
 
