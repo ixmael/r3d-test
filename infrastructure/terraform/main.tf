@@ -1,6 +1,6 @@
-resource "docker_container" "restapi" {
-  name  = "${local.project_name}_${var.environment}_restapi"
-  image = docker_image.restapi.latest
+resource "docker_container" "l2-restapi" {
+  name  = "${local.project_name}_${var.environment}_l2_restapi"
+  image = docker_image.l2-restapi.latest
 
   attach   = false
   must_run = true
@@ -13,6 +13,6 @@ resource "docker_container" "restapi" {
 
   ports {
     internal = 3000
-    external = var.restapi_port
+    external = 3000
   }
 }
