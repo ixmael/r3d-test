@@ -8,6 +8,10 @@ import statsHandler from './handlers/stats';
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
+// Load environment variables
+require('dotenv').config();
 
 /**
  * Initialze the RestAPI server
@@ -15,8 +19,8 @@ const bodyParser = require('body-parser');
 const init = async () => {
   // Initialize the chain repository
   const configRepository: ConfigRepositoryType = {
-    uri: 'mongodb://root:example@172.19.1.31:27017/?retryWrites=true&w=majority',
-    database: 'r3d',
+    uri: process.env.REPOSITORY_URI,
+    database: process.env.REPOSITORY_DATABASE,
   } as ConfigRepositoryType;
   const repository: ChainRepositoryInterface = await repositoryService(configRepository);
 
@@ -30,15 +34,15 @@ const init = async () => {
   // Initialize the server
   const restAPI = express();
   restAPI.use(bodyParser.json());
+  restAPI.use(cors());
 
   // Configure the router
   restAPI.post('/sequence', sequenceHandler(services));
   restAPI.get('/stats', statsHandler(services));
 
   // Start the server
-  const port = 3000;
-  restAPI.listen(port, () => {
-    console.log(`server up on http://localhost:${port}`);
+  restAPI.listen(process.env.RESTAPI_PORT, () => {
+    console.log(`server up on http://localhost:${process.env.RESTAPI_PORT}`);
   });
 };
 

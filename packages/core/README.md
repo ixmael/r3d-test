@@ -1,5 +1,5 @@
-# Tecnichal test for R3D
-This package implements a function that counts the sequences of a chain. This was implemented with *Typescript*.
+# Function (level 1)
+This implements the technical test's level 1. This package implements a function that counts the sequences of a chain. This was implemented with *Typescript*.
 
 ## Setup
 You have to install the dependencies with:
