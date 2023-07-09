@@ -1,6 +1,6 @@
 import getSequencesNumber from '@ixmael/core';
 
-// require('dotenv').config();
+require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const restAPI = express();
 restAPI.use(bodyParser.json());
 
+// Handler that check if a chain has sequences or not
 restAPI.post("/sequence", (request: any, response: any) => {
   const numberOfSequence = getSequencesNumber(request.body.chain);
 
@@ -23,7 +24,6 @@ restAPI.post("/sequence", (request: any, response: any) => {
 
 });
 
-const port = 3000;
-restAPI.listen(port, () => {
-  console.log(`server up on http://localhost:${port}`);
+restAPI.listen(process.env.RESTAPI_PORT, () => {
+  console.log(`server up on http://localhost:${process.env.RESTAPI_PORT}`);
 });
