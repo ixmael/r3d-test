@@ -47,8 +47,8 @@ const getStats = (database: Db) => async (): Promise<StatsRepositoryType> => {
 
     const aggCursor = await database.collection('chains').aggregate(pipeline);
     await aggCursor.forEach((statList: any) => {
-      results.count_sequence_string = statList.count_sequence_string[0].total;
-      results.count_no_sequence_string = statList.count_no_sequence_string[0].total;
+      results.count_sequence_string = statList?.count_sequence_string[0]?.total || 0;
+      results.count_no_sequence_string = statList?.count_no_sequence_string[0]?.total || 0;
     });
   } catch (errorOnSearch: any) {
     err = errorOnSearch;
